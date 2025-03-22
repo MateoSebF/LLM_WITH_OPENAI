@@ -37,79 +37,31 @@ Before you begin, make sure you have the following prerequisites:
 ### Installing
 Clone this repository to your local machine:
 ```
-git clone <repository_url>
-cd <repository_folder>
+git clone https://github.com/MateoSebF/LLM_WITH_OPENAI.git
+cd LLM_WITH_OPENAI
 ```
 
 Install the required dependencies
 
 
 ### Architecture
-To understand the architecture followed in this article, we are going to use a diagram like this:
+To understand the architecture presented in this article, we will use the following diagram:
 
-![Class Diagram](images/Class_Diagram.png)
 
-In this architecture, we extend the structure of Lab5_AREP with the login system by defining the interaction between key components to ensure secure authentication. The design consists of four main components:
 
-User: This is the model class where we define user-related attributes, such as id, email, and password. It is annotated with @Entity, indicating that it represents a table in the database.
+![Class Diagram](images/rag.png)
 
-UserRepository: This interface extends JpaRepository and allows interaction with the database, enabling operations such as saving, deleting, and retrieving user data. It is annotated with @Repository, making it injectable into the UserService.
+In this architecture, we leverage the ability to provide additional context to an LLM. The process consists of four steps:
 
-UserService: This class contains the business logic for user authentication and management. It handles operations like user registration, password encoding, and authentication validation. It interacts with UserRepository to fetch or update user data securely.
+1. Loading the documents: We retrieve the documents that will be used.
+2. Splitting the documents: We divide the documents into smaller, more manageable chunks for the LLM.
+3. Embedding: We tokenize the documents and transform their content into a more understandable format.
+4. Storing embeddings: Once tokenized, we store the embeddings using Pinecone.
+![Pinecom](images/pinecon.png)
 
-UserController: This class serves as the entry point for authentication-related operations. It is annotated with @RestController and exposes endpoints such as /auth/register and /auth/login. The controller processes authentication requests, validates user credentials, and returns appropriate responses, such as JWT tokens for secure session management.
+### Demo Demostration 
 
-This architecture ensures a clear separation of concerns, making the system maintainable and scalable. Security measures, such as password hashing using BCryptPasswordEncoder.
-
-# Deployment
-To deploy this project, we use a Docker-based solution on AWS, ensuring a secure and scalable setup.
-
-## AWS Deployment
-To deploy the application on AWS, we performed the following steps:
-
-1. Created two EC2 instances—one for the backend and one for the frontend.
-2. Configured security rules to allow inbound traffic on the required ports:
-    - 80 and 443 for HTTPS access.
-    - 3306 for MySQL (restricted access).
-3. Assigned an Elastic IP to each instance to ensure a static address.
-4. Configured a custom domain using Duck DNS, associating it with the Elastic IPs.
-5. Installed Let's Encrypt and Certbot on both instances to generate SSL certificates, enabling secure HTTPS connections for both the frontend and backend.
-
-## Backend Deployment
-1. Installed Git and Docker on the EC2 instance.
-
-2. Cloned the repository and navigated to the backend folder.
-
-3. Ran the following command to build and start the backend and database containers:
-
-```
-docker-compose up --build -d
-```
-
-4. This command builds the backend image and deploys both the backend and MySQL containers.
-5. The application now runs securely with HTTPS, as seen in the deployment demo.
-
-## Frontend Deployment
-1. Installed Git and Docker on the frontend EC2 instance.
-
-2. Cloned the repository and navigated to the frontend folder.
-
-3. Built the frontend Docker image using:
-
-```
-docker build -t frontend-app .
-```
-4. Ran the frontend container using:
-
-```
-docker run -d -p 80:80 -p 443:443 --name frontend-container frontend-app
-```
-5. The frontend is now accessible via the configured Duck DNS domain over HTTPS.
-
-### Link to Deployment Demo Demostration 
-
-[Watch the deployment in action](https://pruebacorreoescuelaingeduco.sharepoint.com/sites/Reco842/Shared%20Documents/General/Recordings/Reuni%C3%B3n%20en%20_General_-20250314_011913-Grabaci%C3%B3n%20de%20la%20reuni%C3%B3n.mp4?web=1&referrer=Teams.TEAMS-WEB&referrerScenario=MeetingChicletGetLink.view)  
-
+![Pinecom](images/working.png)
 
 ## Built With
 
